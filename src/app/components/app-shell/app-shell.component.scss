@@ -7,7 +7,7 @@
   --shell-nav-expanded: 240px;
   --shell-nav-collapsed: 72px;
   --shell-nav-width: var(--shell-nav-expanded);
-  --shell-inspector-width: 320px;
+  --shell-inspector-width: 140px;
   --shell-header-height: 56px;
   --shell-dock-height: 64px;
 
@@ -148,16 +148,19 @@
 
 .shell-main {
   grid-area: main;
-  padding: var(--spacing-l, 24px);
+  padding: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-content {
   height: 100%;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-md, 8px);
+  background: transparent;
+  border: none;
+  border-radius: 0;
   overflow: hidden;
+  flex: 1;
 }
 
 .main-chat {
@@ -170,12 +173,17 @@
   border-left: 1px solid rgba(255, 255, 255, 0.06);
   padding: var(--spacing-m, 16px);
   overflow: auto;
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
+  display: flex;
+  flex-direction: column;
 }
 
 .placeholder {
   opacity: 0.8;
   font-size: 14px;
+  padding: var(--spacing-m, 16px);
+  flex: 1;
+  overflow: auto;
 }
 
 .shell-dock {

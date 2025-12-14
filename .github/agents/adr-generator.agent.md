@@ -25,7 +25,7 @@ Before creating an ADR, collect the following inputs from the user or conversati
 
 ### 2. Determine ADR Number
 
-- Check the `/docs/adr/` directory for existing ADRs
+- Check the `docs/adr/` directory for existing ADRs
 - Determine the next sequential 4-digit number (e.g., 0001, 0002, etc.)
 - If the directory doesn't exist, start with 0001
 
@@ -39,7 +39,7 @@ Create an ADR as a markdown file following the standardized format below with th
 - Document all alternatives with clear rejection rationale
 - Use coded bullet points (3-letter codes + 3-digit numbers) for multi-item sections
 - Structure content for both machine parsing and human reference
-- Save the file to `/docs/adr/` with proper naming convention
+- Save the file to `docs/adr/` with proper naming convention
 
 ---
 

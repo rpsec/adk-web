@@ -295,9 +295,9 @@
             <mat-icon>priority_high</mat-icon>
           </button>
         }
-        <as-split direction="horizontal" class="split-container">
-          @if (isTerminalVisible()) {
-            <as-split-area [size]="30" [minSize]="15" [maxSize]="50">
+        @if (isTerminalVisible()) {
+          <as-split direction="vertical" class="split-container">
+            <as-split-area [size]="30" [minSize]="15" [maxSize]="80">
               <mat-card class="terminal-card">
                 <div class="terminal-header">
                   <span class="terminal-title">Terminal</span>
@@ -312,47 +312,86 @@
                 ></app-terminal-tab>
               </mat-card>
             </as-split-area>
-          }
-          <as-split-area [size]="isTerminalVisible() ? 70 : 100">
-            <mat-card class="chat-card">
-              @if (appName != "") {
-                <app-chat-panel
-                  [appName]="appName"
-                  [messages]="messages()"
-                  [isChatMode]="isChatMode()"
-                  [evalCase]="evalCase"
-                  [isEvalEditMode]="isEvalEditMode()"
-                  [isEvalCaseEditing]="isEvalCaseEditing()"
-                  [isEditFunctionArgsEnabled]="(isEditFunctionArgsEnabledObs | async) ?? false"
-                  [(userInput)]="userInput"
-                  [(userEditEvalCaseMessage)]="userEditEvalCaseMessage"
-                  [selectedFiles]="selectedFiles"
-                  [updatedSessionState]="updatedSessionState()"
-                  [eventData]="eventData"
-                  [isAudioRecording]="isAudioRecording"
-                  [isVideoRecording]="isVideoRecording"
-                  [hoveredEventMessageIndices]="hoveredEventMessageIndices"
-                  (clickEvent)="clickEvent($event)"
-                  (handleKeydown)="handleKeydown($event.event, $event.message)"
-                  (cancelEditMessage)="cancelEditMessage($event)"
-                  (saveEditMessage)="saveEditMessage($event)"
-                  (openViewImageDialog)="openViewImageDialog($event)"
-                  (openBase64InNewTab)="openBase64InNewTab($event.data, $event.mimeType)"
-                  (editEvalCaseMessage)="editEvalCaseMessage($event)"
-                  (deleteEvalCaseMessage)="deleteEvalCaseMessage($event.message, $event.index)"
-                  (editFunctionArgs)="editFunctionArgs($event)"
-                  (fileSelect)="onFileSelect($event)"
-                  (removeFile)="removeFile($event)"
-                  (removeStateUpdate)="removeStateUpdate()"
-                  (sendMessage)="sendMessage($event)"
-                  (updateState)="updateState()"
-                  (toggleAudioRecording)="toggleAudioRecording()"
-                  (toggleVideoRecording)="toggleVideoRecording()"
-                ></app-chat-panel>
-              }
-            </mat-card>
-          </as-split-area>
-        </as-split>
+
+            <as-split-area [size]="70">
+              <mat-card class="chat-card">
+                @if (appName != "") {
+                  <app-chat-panel
+                    [appName]="appName"
+                    [messages]="messages()"
+                    [isChatMode]="isChatMode()"
+                    [evalCase]="evalCase"
+                    [isEvalEditMode]="isEvalEditMode()"
+                    [isEvalCaseEditing]="isEvalCaseEditing()"
+                    [isEditFunctionArgsEnabled]="(isEditFunctionArgsEnabledObs | async) ?? false"
+                    [(userInput)]="userInput"
+                    [(userEditEvalCaseMessage)]="userEditEvalCaseMessage"
+                    [selectedFiles]="selectedFiles"
+                    [updatedSessionState]="updatedSessionState()"
+                    [eventData]="eventData"
+                    [isAudioRecording]="isAudioRecording"
+                    [isVideoRecording]="isVideoRecording"
+                    [hoveredEventMessageIndices]="hoveredEventMessageIndices"
+                    (clickEvent)="clickEvent($event)"
+                    (handleKeydown)="handleKeydown($event.event, $event.message)"
+                    (cancelEditMessage)="cancelEditMessage($event)"
+                    (saveEditMessage)="saveEditMessage($event)"
+                    (openViewImageDialog)="openViewImageDialog($event)"
+                    (openBase64InNewTab)="openBase64InNewTab($event.data, $event.mimeType)"
+                    (editEvalCaseMessage)="editEvalCaseMessage($event)"
+                    (deleteEvalCaseMessage)="deleteEvalCaseMessage($event.message, $event.index)"
+                    (editFunctionArgs)="editFunctionArgs($event)"
+                    (fileSelect)="onFileSelect($event)"
+                    (removeFile)="removeFile($event)"
+                    (removeStateUpdate)="removeStateUpdate()"
+                    (sendMessage)="sendMessage($event)"
+                    (updateState)="updateState()"
+                    (toggleAudioRecording)="toggleAudioRecording()"
+                    (toggleVideoRecording)="toggleVideoRecording()"
+                  ></app-chat-panel>
+                }
+              </mat-card>
+            </as-split-area>
+          </as-split>
+        } @else {
+          <mat-card class="chat-card">
+            @if (appName != "") {
+              <app-chat-panel
+                [appName]="appName"
+                [messages]="messages()"
+                [isChatMode]="isChatMode()"
+                [evalCase]="evalCase"
+                [isEvalEditMode]="isEvalEditMode()"
+                [isEvalCaseEditing]="isEvalCaseEditing()"
+                [isEditFunctionArgsEnabled]="(isEditFunctionArgsEnabledObs | async) ?? false"
+                [(userInput)]="userInput"
+                [(userEditEvalCaseMessage)]="userEditEvalCaseMessage"
+                [selectedFiles]="selectedFiles"
+                [updatedSessionState]="updatedSessionState()"
+                [eventData]="eventData"
+                [isAudioRecording]="isAudioRecording"
+                [isVideoRecording]="isVideoRecording"
+                [hoveredEventMessageIndices]="hoveredEventMessageIndices"
+                (clickEvent)="clickEvent($event)"
+                (handleKeydown)="handleKeydown($event.event, $event.message)"
+                (cancelEditMessage)="cancelEditMessage($event)"
+                (saveEditMessage)="saveEditMessage($event)"
+                (openViewImageDialog)="openViewImageDialog($event)"
+                (openBase64InNewTab)="openBase64InNewTab($event.data, $event.mimeType)"
+                (editEvalCaseMessage)="editEvalCaseMessage($event)"
+                (deleteEvalCaseMessage)="deleteEvalCaseMessage($event.message, $event.index)"
+                (editFunctionArgs)="editFunctionArgs($event)"
+                (fileSelect)="onFileSelect($event)"
+                (removeFile)="removeFile($event)"
+                (removeStateUpdate)="removeStateUpdate()"
+                (sendMessage)="sendMessage($event)"
+                (updateState)="updateState()"
+                (toggleAudioRecording)="toggleAudioRecording()"
+                (toggleVideoRecording)="toggleVideoRecording()"
+              ></app-chat-panel>
+            }
+          </mat-card>
+        }
       }
     </div>
 
