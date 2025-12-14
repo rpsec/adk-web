@@ -15,23 +15,24 @@
  * limitations under the License.
  */
 
-import {Component, inject, Inject} from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogRef,
-  MatDialogTitle
-} from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { AgentNode } from '../../core/models/AgentBuilder';
-import { YamlUtils } from '../../../utils/yaml-utils';
-import { AGENT_SERVICE } from '../../core/services/interfaces/agent';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatFormField, MatHint } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { Component, inject, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
+import {
+    MAT_DIALOG_DATA,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogRef,
+    MatDialogTitle
+} from '@angular/material/dialog';
+import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { YamlUtils } from '../../../utils/yaml-utils';
+import { AgentNode } from '../../core/models/AgentBuilder';
+import { AGENT_SERVICE } from '../../core/services/interfaces/agent';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -42,6 +43,9 @@ import { MatButton } from '@angular/material/button';
     MatDialogTitle,
     MatFormField,
     MatInput,
+    MatLabel,
+    MatSelect,
+    MatOption,
     FormsModule,
     MatDialogActions,
     MatButton,
@@ -52,6 +56,14 @@ import { MatButton } from '@angular/material/button';
 export class AddItemDialogComponent {
   // TODO: Replace the eval dialogs to use this common dialog component
   protected newAppName = '';
+  protected models = [
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gpt-4o-mini',
+    'gpt-4o',
+    'gpt-4o-realtime-preview'
+  ];
+  protected selectedModel = 'gemini-2.5-flash';
   private agentService = inject(AGENT_SERVICE);
   private _snackBar = inject(MatSnackBar);
   private router = inject(Router);
@@ -106,7 +118,7 @@ export class AddItemDialogComponent {
       agent_class: 'LlmAgent',
       instruction: 'You are the root agent that coordinates other agents.',
       isRoot: true,
-      model: 'gemini-2.5-flash',
+      model: this.selectedModel,
       name: trimmedName,
       sub_agents: [],
       tools: [],

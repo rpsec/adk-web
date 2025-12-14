@@ -1,0 +1,228 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-shell {
+  --shell-nav-expanded: 240px;
+  --shell-nav-collapsed: 72px;
+  --shell-nav-width: var(--shell-nav-expanded);
+  --shell-inspector-width: 320px;
+  --shell-header-height: 56px;
+  --shell-dock-height: 64px;
+
+  display: grid;
+  grid-template-columns: var(--shell-nav-width) 1fr var(--shell-inspector-width);
+  grid-template-rows: var(--shell-header-height) 1fr var(--shell-dock-height);
+  grid-template-areas:
+    "header header header"
+    "nav main inspector"
+    "dock dock dock";
+  height: 100vh;
+  background: var(--mat-sys-background, #121212);
+  color: var(--adk-web-text-color-light-gray, #c4c7c5);
+}
+
+:host(.nav-collapsed) .app-shell,
+.app-shell.nav-collapsed {
+  --shell-nav-width: var(--shell-nav-collapsed);
+}
+
+.shell-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-l, 24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+}
+
+.header-left {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-m, 16px);
+  min-width: 0;
+}
+
+.logo {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.context {
+  color: var(--adk-web-text-color-light-gray, #c4c7c5);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-s, 12px);
+}
+
+.icon-button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: inherit;
+  border-radius: var(--radius-md, 8px);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.primary,
+.ghost {
+  border-radius: var(--radius-md, 8px);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.primary {
+  background: #8ab4f8;
+  color: #0b1b3a;
+}
+
+.ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: inherit;
+}
+
+.shell-body {
+  display: contents;
+}
+
+.shell-nav {
+  grid-area: nav;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--spacing-m, 16px) var(--spacing-s, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s, 12px);
+}
+
+.shell-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 8px);
+}
+
+.nav-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s, 12px);
+  padding: 10px 12px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nav-button:hover,
+.nav-button:focus-visible {
+  border-color: rgba(138, 180, 248, 0.4);
+  background: rgba(138, 180, 248, 0.12);
+}
+
+.nav-button .icon {
+  font-size: 18px;
+}
+
+.nav-button .label {
+  white-space: nowrap;
+}
+
+:host(.nav-collapsed) .nav-button .label {
+  display: none;
+}
+
+.shell-main {
+  grid-area: main;
+  padding: var(--spacing-l, 24px);
+  overflow: hidden;
+}
+
+.main-content {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+}
+
+.main-chat {
+  display: block;
+  height: 100%;
+}
+
+.shell-inspector {
+  grid-area: inspector;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--spacing-m, 16px);
+  overflow: auto;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.placeholder {
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.shell-dock {
+  grid-area: dock;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--spacing-s, 12px) var(--spacing-l, 24px);
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.dock-tabs {
+  display: inline-flex;
+  gap: var(--spacing-m, 16px);
+  align-items: center;
+  font-size: 14px;
+}
+
+.dock-tab {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm, 6px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 1280px) {
+  .app-shell {
+    grid-template-columns: var(--shell-nav-width) 1fr;
+    grid-template-areas:
+      "header header"
+      "nav main"
+      "dock dock";
+  }
+
+  .shell-inspector {
+    display: none;
+  }
+}
+
+@media (max-width: 960px) {
+  .app-shell {
+    --shell-nav-width: var(--shell-nav-collapsed);
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "main"
+      "dock";
+  }
+
+  .shell-nav {
+    display: none;
+  }
+}

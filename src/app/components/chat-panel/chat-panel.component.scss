@@ -4,6 +4,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* allow absolute-positioned children to be positioned relative to host */
+  position: relative;
+  /* ensure flex children can shrink and allow overflow handling */
+  min-height: 0;
 }
 
 .generated-image-container {
@@ -33,6 +37,8 @@
   overflow-y: auto;
   padding: 20px;
   margin-top: 16px;
+  /* ensure messages don't get obscured by the sticky input */
+  padding-bottom: 140px;
 }
 
 .message-card {
@@ -209,22 +215,38 @@
 .chat-input {
   display: flex;
   padding: 10px;
-  width: 60%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0; /* fill the host container horizontally */
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
+  align-items: flex-end;
+  /* Anchor input to the bottom of the host so it remains visible while messages scroll */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Use theme-aware background when available, otherwise inherit host background */
+  background: var(--chat-panel-input-background-color, inherit);
+  box-shadow: 0 -6px 18px rgba(16,24,40,0.06);
+  z-index: 10;
+
+  /* ensure contents inside the input field don't exceed the width */
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .input-field {
   flex-grow: 1;
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
 
   textarea {
     color: var(--chat-panel-input-field-textarea-color);
     border: none;
     padding: 10px;
-    box-sizing: content-box;
+    box-sizing: border-box; /* ensure padding doesn't overflow */
     caret-color: var(--chat-panel-input-field-textarea-caret-color);
 
     &::placeholder {
@@ -239,16 +261,16 @@
 }
 
 .chat-input-actions {
-  width: 106%;
-  margin-top: 10px;
+  width: 100%;
+  margin-top: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 100%;
 
   button {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 8px;
+    margin-right: 8px;
   }
 }
 

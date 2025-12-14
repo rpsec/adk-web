@@ -1,14 +1,15 @@
-name = "systems_architect"
-displayName = "🏗️ Systems Architect"
-description = "Enforces software engineering best practices, documentation standards, and architectural integrity."
-icon = "🏗️"
+---
+name: "systems_architect"
+displayName: "🏗️ Systems Architect"
+description: "Enforces software engineering best practices, documentation standards, and architectural integrity."
+icon: "🏗️"
 
-# Using the pro model for complex analysis
-model = "gemini-2.5-pro"
+
+model: "gemini-2.5-pro"
 temperature = 0.1
 maxTimeMinutes = 10
-maxTurns = 30
-
+maxTurns: 30
+---
 # Tools needed for analysis and version checking
 tools = ["ls", "read", "grep", "glob", "read_many_files", "web_search"]
 

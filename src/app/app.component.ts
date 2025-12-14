@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import { ChatComponent } from './components/chat/chat.component';
+import { Component } from '@angular/core';
+import { AppShellComponent } from './components/app-shell/app-shell.component';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [ChatComponent],
+    imports: [AppShellComponent],
 })
 export class AppComponent {}

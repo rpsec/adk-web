@@ -1,0 +1,67 @@
+<div class="app-shell">
+  <header class="shell-header" role="banner">
+    <div class="header-left">
+      <button type="button" class="icon-button" (click)="toggleNav()" aria-label="Toggle navigation" [attr.aria-pressed]="navCollapsed">
+        ☰
+      </button>
+      <div class="logo" aria-label="Agent Development Kit">ADK</div>
+      <div class="context">Workspace · <span class="session">unsaved</span></div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="ghost" (click)="onSave()">Save</button>
+      <button type="button" class="primary" (click)="onRun()">Run</button>
+      <app-theme-toggle></app-theme-toggle>
+    </div>
+  </header>
+
+  <div class="shell-body">
+    <nav class="shell-nav" role="navigation" aria-label="Tool navigation">
+      <ul>
+        <li>
+          <button type="button" class="nav-button" aria-label="Workspaces">
+            <span class="icon">🏠</span>
+            <span class="label">Workspaces</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-button" aria-label="Artifacts">
+            <span class="icon">📁</span>
+            <span class="label">Artifacts</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-button" aria-label="Builder">
+            <span class="icon">🧰</span>
+            <span class="label">Builder</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-button" aria-label="Eval">
+            <span class="icon">🧪</span>
+            <span class="label">Eval</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="shell-main" role="main">
+      <section class="main-content" aria-label="Main workspace">
+        <app-chat class="main-chat"></app-chat>
+      </section>
+    </main>
+
+    <aside class="shell-inspector" role="complementary" aria-label="Inspector">
+      <div class="placeholder">Inspector (contextual details)</div>
+    </aside>
+  </div>
+
+  <div class="shell-dock" role="region" aria-label="Bottom dock">
+    <div class="dock-tabs">
+      <span class="dock-tab">Terminal</span>
+      <span class="dock-tab">Trace</span>
+      <span class="dock-tab">Session</span>
+      <span class="dock-tab">Eval</span>
+    </div>
+  </div>
+</div>

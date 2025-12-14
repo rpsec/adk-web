@@ -1,8 +1,8 @@
 # TASK005 - Add Interactive Terminal (xterm.js)
 
-**Status:** In Progress  
+**Status:** Completed  
 **Added:** 2025-12-13  
-**Updated:** 2025-12-13
+**Updated:** 2025-12-14
 
 ## Original Request
 “Add a terminal to this front-end application using xterm.js. Agents should have access to the last 20 lines of terminal history, or the entire history if the user desires. Terminal should be interactive; commands will run somewhere else.”
@@ -32,17 +32,17 @@ Key requirements:
 
 ## Progress Tracking
 
-**Overall Status:** In Progress - 70%
+**Overall Status:** Completed - 100%
 
 ### Subtasks
 | ID | Description | Status | Updated | Notes |
 |----|-------------|--------|---------|-------|
 | 5.1 | Add deps + styles | Complete | 2025-12-13 | package.json + angular.json styles |
 | 5.2 | Implement TerminalService + CommandService | Complete | 2025-12-13 | Tokens + providers in main.ts |
-| 5.3 | Add Terminal tab UI | In Progress | 2025-12-13 | Component created + mounted in side panel |
+| 5.3 | Add Terminal tab UI | Complete | 2025-12-14 | Component created, mounted, and verified |
 | 5.4 | Inject history into agent prompt | Complete | 2025-12-13 | Option A in chat component |
-| 5.5 | Add unit tests | In Progress | 2025-12-13 | terminal.service.spec.ts added |
-| 5.6 | Fix impacted unit tests (DI) | Not Started | 2025-12-13 | Specs need `TERMINAL_SERVICE` provider (NullInjectorError) |
+| 5.5 | Add unit tests | Complete | 2025-12-14 | terminal.service.spec.ts added and passing |
+| 5.6 | Fix impacted unit tests (DI) | Complete | 2025-12-14 | Added TERMINAL_SERVICE provider stubs to affected specs |
 
 ## Progress Log
 ### 2025-12-13
@@ -55,3 +55,9 @@ Key requirements:
 ### 2025-12-13
 - Ran `npm test`; many failures were reported due to missing providers for `TERMINAL_SERVICE` in component specs.
 - Next step: update affected specs (e.g., `AppComponent`, `ChatComponent`, `SidePanelComponent`) to provide a stub `TerminalService` via the DI token so tests can run.
+
+### 2025-12-14
+- Completed Terminal UI integration and end-to-end verification in the app shell.
+- Fixed unit test DI issues by providing `TERMINAL_SERVICE` test providers/stubs in affected specs; all terminal-related tests now pass.
+- Persisted terminal history per session and verified redaction/share toggles.
+- Updated task status to Completed and set overall completion to 100%.

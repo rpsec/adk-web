@@ -20,31 +20,31 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, in
 import { FormsModule } from '@angular/forms';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import { MatOption, MatSelect } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatExpansionModule} from '@angular/material/expansion';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { TooltipUtil } from '../../../utils/tooltip-util';
 import { YamlUtils } from '../../../utils/yaml-utils';
-import { AgentNode, ToolNode, CallbackNode } from '../../core/models/AgentBuilder';
 import { getToolIcon } from '../../core/constants/tool-icons';
+import { AgentNode, CallbackNode, ToolNode } from '../../core/models/AgentBuilder';
 import { AGENT_SERVICE } from '../../core/services/interfaces/agent';
-import {AGENT_BUILDER_SERVICE} from '../../core/services/interfaces/agent-builder';
+import { AGENT_BUILDER_SERVICE } from '../../core/services/interfaces/agent-builder';
+import { FEATURE_FLAG_SERVICE } from '../../core/services/interfaces/feature-flag';
 import { AddCallbackDialogComponent } from '../add-callback-dialog/add-callback-dialog.component';
 import { AddToolDialogComponent } from '../add-tool-dialog/add-tool-dialog.component';
 import { BuiltInToolDialogComponent } from '../built-in-tool-dialog/built-in-tool-dialog.component';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../confirmation-dialog/confirmation-dialog.component';
 import { JsonEditorComponent } from '../json-editor/json-editor.component';
-import {FEATURE_FLAG_SERVICE} from '../../core/services/interfaces/feature-flag';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
-import { TooltipUtil } from '../../../utils/tooltip-util';
 import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
@@ -61,6 +61,7 @@ import { ThemeToggle } from '../theme-toggle/theme-toggle';
     MatInput,
     MatIconButton,
     MatLabel,
+    MatHint,
     MatOption,
     MatSelect,
     MatTooltip,
@@ -113,7 +114,11 @@ export class BuilderTabsComponent {
 
   models = [
     "gemini-2.5-flash",
-    "gemini-2.5-pro"
+    "gemini-2.5-pro",
+    "gpt-4o-mini",
+    "gpt-4o",
+    "gpt-4o-realtime-preview",
+    "gpt-3.5-turbo"
   ];
 
   agentTypes = [
@@ -768,11 +773,28 @@ export class BuilderTabsComponent {
       return;
     }
 
+    // Ensure any edits made in the UI (`agentConfig`) are copied back into
+    // the stored nodes before generating YAML. This keeps the in-memory
+    // representation (used by YamlUtils) in sync with the form values.
+    if (this.agentConfig && rootAgent.name === this.agentConfig.name) {
+      const mergedRoot = { ...rootAgent, ...this.agentConfig } as AgentNode;
+      // addNode will replace existing node by name if present.
+      this.agentBuilderService.addNode(mergedRoot);
+      // Refresh reference to rootAgent from the service
+      const refreshedRoot = this.agentBuilderService.getRootNode();
+      if (refreshedRoot) {
+        // use refreshedRoot for YAML generation
+      }
+    }
+
     const formData = new FormData();
 
     const tabAgents = this.agentBuilderService.getCurrentAgentToolBoards();
 
-    YamlUtils.generateYamlFile(rootAgent, formData, appName, tabAgents);
+    // Use the latest root node from the service (which we just updated)
+    const latestRoot = this.agentBuilderService.getRootNode() || rootAgent;
+
+    YamlUtils.generateYamlFile(latestRoot, formData, appName, tabAgents);
 
     this.agentService.agentBuildTmp(formData).subscribe((success) => {
       if (success) {

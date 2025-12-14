@@ -115,6 +115,7 @@ const BIDI_STREAMING_RESTART_WARNING =
 
 @Component({
   selector: 'app-chat',
+  standalone: true,
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
   providers: [

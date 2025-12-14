@@ -82,11 +82,17 @@
               @if (agentConfig.agent_class === 'LlmAgent') {
                 <mat-form-field>
                   <mat-label>Model</mat-label>
-                  <mat-select [(ngModel)]="agentConfig.model">
-                    @for (model of models; track model) {
-                    <mat-option [value]="model">{{model}}</mat-option>
-                    }
-                  </mat-select>
+                    <mat-select [(ngModel)]="agentConfig.model">
+                      @for (model of models; track model) {
+                      <mat-option [value]="model">{{model}}</mat-option>
+                      }
+                      <mat-option [value]="">Custom / other</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Custom model (or edit selected)</mat-label>
+                  <input matInput [(ngModel)]="agentConfig.model" placeholder="e.g. ollama_chat/mistral-small3.1" />
+                  <mat-hint>Use LiteLLM provider strings like ollama_chat/&lt;model&gt; for local Ollama models.</mat-hint>
                 </mat-form-field>
               }
 

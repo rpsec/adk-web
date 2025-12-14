@@ -33,3 +33,9 @@ This repository is **Agent Development Kit Web UI (adk-web)**: an Angular-based 
 - Established an initial, repo-appropriate task list (see tasks index).
 - Implemented interactive terminal UI + terminal history service and wired Option A history sharing into outgoing prompts.
 - Ran `npm test`; observed widespread `NullInjectorError` failures for `TERMINAL_SERVICE` in `AppComponent`, `ChatComponent`, and `SidePanelComponent` specs.
+
+### 2025-12-13 (memory-bank review)
+- Reviewed all Memory Bank files as requested and verified the content is up-to-date for the repository state on 2025-12-13. No further edits required at this time.
+
+### 2025-12-14
+- TASK005 (Add Interactive Terminal) completed: xterm.js integrated, history/toggles/persistence implemented, command execution client wired, and unit tests updated to provide TERMINAL_SERVICE stubs; all terminal-related tests passing.

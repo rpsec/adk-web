@@ -1,7 +1,6 @@
 # Tasks Index
 
 ## In Progress
-- [TASK005] Add interactive terminal (xterm.js) - Terminal tab + history sharing to agents
 - [TASK003] Validate test harness - Update specs/shared init for new DI tokens (TerminalService)
 
 ## Pending
@@ -11,6 +10,7 @@
 
 ## Completed
 - [TASK000] Update Memory Bank alignment - Replace unrelated project docs with adk-web documentation (Completed 2025-12-13)
+- [TASK005] Add interactive terminal (xterm.js) - Terminal tab + history sharing to agents (Completed 2025-12-14)
 
 ## Abandoned
 (None yet)
