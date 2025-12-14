@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {InjectionToken} from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
 /**
  * Default English messages for SidePanelComponent.
@@ -23,6 +23,7 @@ import {InjectionToken} from '@angular/core';
 export const SIDE_PANEL_MESSAGES = {
   agentDevelopmentKitLabel: 'Agent Development Kit',
   collapsePanelTooltip: 'Collapse panel',
+  terminalTabLabel: 'Terminal',
   traceTabLabel: 'Trace',
   eventsTabLabel: 'Events',
   stateTabLabel: 'State',

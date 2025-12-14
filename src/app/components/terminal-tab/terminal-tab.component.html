@@ -1,0 +1,38 @@
+<div class="terminal-tab">
+  <div class="terminal-controls">
+    <mat-slide-toggle
+      [checked]="settings().shareWithAgentEnabled"
+      (change)="updateSetting('shareWithAgentEnabled', $event.checked)"
+    >
+      Share with agent
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      [checked]="settings().shareFullHistoryEnabled"
+      [disabled]="!settings().shareWithAgentEnabled"
+      (change)="updateSetting('shareFullHistoryEnabled', $event.checked)"
+    >
+      Share full history
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      [checked]="settings().redactionEnabled"
+      (change)="updateSetting('redactionEnabled', $event.checked)"
+    >
+      Redact secrets
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      [checked]="settings().persistenceEnabled"
+      (change)="updateSetting('persistenceEnabled', $event.checked)"
+    >
+      Persist history
+    </mat-slide-toggle>
+
+    <span class="terminal-controls-spacer"></span>
+
+    <button mat-button type="button" (click)="clearTerminal()">Clear</button>
+  </div>
+
+  <div #terminalContainer class="terminal-container"></div>
+</div>

@@ -94,6 +94,16 @@
     }
     <mat-tab class="tabs-header">
       <ng-template mat-tab-label>
+        <span class="tab-label">{{ i18n.terminalTabLabel }}</span>
+      </ng-template>
+      <app-terminal-tab
+        [appName]="appName()"
+        [userId]="userId()"
+        [sessionId]="sessionId()"
+      ></app-terminal-tab>
+    </mat-tab>
+    <mat-tab class="tabs-header">
+      <ng-template mat-tab-label>
         <span class="tab-label">{{ i18n.eventsTabLabel }}</span>
       </ng-template>
       <app-event-tab

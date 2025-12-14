@@ -15,36 +15,37 @@
  * limitations under the License.
  */
 
-import {AsyncPipe, NgComponentOutlet, NgTemplateOutlet} from '@angular/common';
-import {AfterViewInit, Component, DestroyRef, effect, EnvironmentInjector, inject, input, output, runInInjectionContext, signal, Type, viewChild, ViewContainerRef, type WritableSignal} from '@angular/core';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatMiniFabButton} from '@angular/material/button';
-import {MatOption} from '@angular/material/core';
-import {MatIcon} from '@angular/material/icon';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatSelect, MatSelectChange} from '@angular/material/select';
-import {MatTab, MatTabChangeEvent, MatTabGroup, MatTabLabel} from '@angular/material/tabs';
-import {MatTooltip} from '@angular/material/tooltip';
-import {type SafeHtml} from '@angular/platform-browser';
-import {NgxJsonViewerModule} from 'ngx-json-viewer';
-import {combineLatest, Observable, of} from 'rxjs';
-import {first, map} from 'rxjs/operators';
+import { AsyncPipe, NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
+import { AfterViewInit, Component, DestroyRef, effect, EnvironmentInjector, inject, input, output, runInInjectionContext, signal, Type, viewChild, ViewContainerRef, type WritableSignal } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatOption } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
+import { MatTooltip } from '@angular/material/tooltip';
+import { type SafeHtml } from '@angular/platform-browser';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { Observable, of } from 'rxjs';
+import { first } from 'rxjs/operators';
 
-import {EvalCase} from '../../core/models/Eval';
-import {Session} from '../../core/models/Session';
-import {FEATURE_FLAG_SERVICE} from '../../core/services/interfaces/feature-flag';
-import {UI_STATE_SERVICE} from '../../core/services/interfaces/ui-state';
-import {LOGO_COMPONENT} from '../../injection_tokens';
-import {ArtifactTabComponent} from '../artifact-tab/artifact-tab.component';
-import {EVAL_TAB_COMPONENT, EvalTabComponent} from '../eval-tab/eval-tab.component';
-import {EventTabComponent} from '../event-tab/event-tab.component';
-import {SessionTabComponent} from '../session-tab/session-tab.component';
-import {StateTabComponent} from '../state-tab/state-tab.component';
-import {ThemeToggle} from '../theme-toggle/theme-toggle';
-import {TraceTabComponent} from '../trace-tab/trace-tab.component';
+import { EvalCase } from '../../core/models/Eval';
+import { Session } from '../../core/models/Session';
+import { FEATURE_FLAG_SERVICE } from '../../core/services/interfaces/feature-flag';
+import { UI_STATE_SERVICE } from '../../core/services/interfaces/ui-state';
+import { LOGO_COMPONENT } from '../../injection_tokens';
+import { ArtifactTabComponent } from '../artifact-tab/artifact-tab.component';
+import { EVAL_TAB_COMPONENT, EvalTabComponent } from '../eval-tab/eval-tab.component';
+import { EventTabComponent } from '../event-tab/event-tab.component';
+import { SessionTabComponent } from '../session-tab/session-tab.component';
+import { StateTabComponent } from '../state-tab/state-tab.component';
+import { TerminalTabComponent } from '../terminal-tab/terminal-tab.component';
+import { ThemeToggle } from '../theme-toggle/theme-toggle';
+import { TraceTabComponent } from '../trace-tab/trace-tab.component';
 
-import {SidePanelMessagesInjectionToken} from './side-panel.component.i18n';
+import { SidePanelMessagesInjectionToken } from './side-panel.component.i18n';
 
 /**
  * Side panel component.
@@ -65,6 +66,7 @@ import {SidePanelMessagesInjectionToken} from './side-panel.component.i18n';
     MatTabLabel,
     ThemeToggle,
     TraceTabComponent,
+    TerminalTabComponent,
     EventTabComponent,
     StateTabComponent,
     ArtifactTabComponent,

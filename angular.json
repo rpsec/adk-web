@@ -33,6 +33,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/@xterm/xterm/css/xterm.css",
               "src/styles.scss"
             ],
             "scripts": [],
@@ -105,6 +106,7 @@
               }
             ],
             "styles": [
+              "node_modules/@xterm/xterm/css/xterm.css",
               "src/styles.scss"
             ],
             "scripts": []

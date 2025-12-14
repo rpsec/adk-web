@@ -15,64 +15,65 @@
  * limitations under the License.
  */
 
-import {AsyncPipe, DOCUMENT, NgClass} from '@angular/common';
-import {HttpErrorResponse} from '@angular/common/http';
-import {AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Injectable, OnDestroy, OnInit, Renderer2, signal, viewChild, WritableSignal} from '@angular/core';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatButton, MatFabButton} from '@angular/material/button';
-import {MatCard} from '@angular/material/card';
-import {MatDialog} from '@angular/material/dialog';
-import {MatDivider} from '@angular/material/divider';
-import {MatIcon} from '@angular/material/icon';
-import {MatPaginatorIntl} from '@angular/material/paginator';
-import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatTooltip} from '@angular/material/tooltip';
-import {SafeHtml} from '@angular/platform-browser';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {NgxJsonViewerModule} from 'ngx-json-viewer';
-import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
-import {catchError, distinctUntilChanged, filter, first, map, shareReplay, switchMap, take, tap} from 'rxjs/operators';
+import { AsyncPipe, DOCUMENT, NgClass } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, Injectable, OnDestroy, OnInit, Renderer2, signal, viewChild, WritableSignal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButton, MatFabButton } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { MatDivider } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatDrawer, MatDrawerContainer } from '@angular/material/sidenav';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltip } from '@angular/material/tooltip';
+import { SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, first, map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
 
-import {URLUtil} from '../../../utils/url-util';
-import {AgentRunRequest} from '../../core/models/AgentRunRequest';
-import {EvalCase} from '../../core/models/Eval';
-import {Session, SessionState} from '../../core/models/Session';
-import {Event as AdkEvent, Part} from '../../core/models/types';
-import {AGENT_SERVICE} from '../../core/services/interfaces/agent';
-import {AGENT_BUILDER_SERVICE} from '../../core/services/interfaces/agent-builder';
-import {ARTIFACT_SERVICE} from '../../core/services/interfaces/artifact';
-import {DOWNLOAD_SERVICE} from '../../core/services/interfaces/download';
-import {EVAL_SERVICE} from '../../core/services/interfaces/eval';
-import {EVENT_SERVICE} from '../../core/services/interfaces/event';
-import {FEATURE_FLAG_SERVICE} from '../../core/services/interfaces/feature-flag';
-import {GRAPH_SERVICE} from '../../core/services/interfaces/graph';
-import {LOCAL_FILE_SERVICE} from '../../core/services/interfaces/localfile';
-import {SAFE_VALUES_SERVICE} from '../../core/services/interfaces/safevalues';
-import {SESSION_SERVICE} from '../../core/services/interfaces/session';
-import {STREAM_CHAT_SERVICE} from '../../core/services/interfaces/stream-chat';
-import {STRING_TO_COLOR_SERVICE} from '../../core/services/interfaces/string-to-color';
-import {TRACE_SERVICE} from '../../core/services/interfaces/trace';
-import {UI_STATE_SERVICE} from '../../core/services/interfaces/ui-state';
-import {LOCATION_SERVICE} from '../../core/services/location.service';
-import {ResizableBottomDirective} from '../../directives/resizable-bottom.directive';
-import {ResizableDrawerDirective} from '../../directives/resizable-drawer.directive';
-import {AddItemDialogComponent} from '../add-item-dialog/add-item-dialog.component';
-import {getMediaTypeFromMimetype, MediaType} from '../artifact-tab/artifact-tab.component';
-import {BuilderTabsComponent} from '../builder-tabs/builder-tabs.component';
-import {CanvasComponent} from '../canvas/canvas.component';
-import {ChatPanelComponent} from '../chat-panel/chat-panel.component';
-import {EditJsonDialogComponent} from '../edit-json-dialog/edit-json-dialog.component';
-import {EvalTabComponent} from '../eval-tab/eval-tab.component';
-import {PendingEventDialogComponent} from '../pending-event-dialog/pending-event-dialog.component';
-import {DeleteSessionDialogComponent, DeleteSessionDialogData,} from '../session-tab/delete-session-dialog/delete-session-dialog.component';
-import {SidePanelComponent} from '../side-panel/side-panel.component';
-import {TraceEventComponent} from '../trace-tab/trace-event/trace-event.component';
-import {ViewImageDialogComponent} from '../view-image-dialog/view-image-dialog.component';
+import { URLUtil } from '../../../utils/url-util';
+import { AgentRunRequest } from '../../core/models/AgentRunRequest';
+import { EvalCase } from '../../core/models/Eval';
+import { Session, SessionState } from '../../core/models/Session';
+import { Event as AdkEvent, Part } from '../../core/models/types';
+import { AGENT_SERVICE } from '../../core/services/interfaces/agent';
+import { AGENT_BUILDER_SERVICE } from '../../core/services/interfaces/agent-builder';
+import { ARTIFACT_SERVICE } from '../../core/services/interfaces/artifact';
+import { DOWNLOAD_SERVICE } from '../../core/services/interfaces/download';
+import { EVAL_SERVICE } from '../../core/services/interfaces/eval';
+import { EVENT_SERVICE } from '../../core/services/interfaces/event';
+import { FEATURE_FLAG_SERVICE } from '../../core/services/interfaces/feature-flag';
+import { GRAPH_SERVICE } from '../../core/services/interfaces/graph';
+import { LOCAL_FILE_SERVICE } from '../../core/services/interfaces/localfile';
+import { SAFE_VALUES_SERVICE } from '../../core/services/interfaces/safevalues';
+import { SESSION_SERVICE } from '../../core/services/interfaces/session';
+import { STREAM_CHAT_SERVICE } from '../../core/services/interfaces/stream-chat';
+import { STRING_TO_COLOR_SERVICE } from '../../core/services/interfaces/string-to-color';
+import { TERMINAL_SERVICE } from '../../core/services/interfaces/terminal';
+import { TRACE_SERVICE } from '../../core/services/interfaces/trace';
+import { UI_STATE_SERVICE } from '../../core/services/interfaces/ui-state';
+import { LOCATION_SERVICE } from '../../core/services/location.service';
+import { ResizableBottomDirective } from '../../directives/resizable-bottom.directive';
+import { ResizableDrawerDirective } from '../../directives/resizable-drawer.directive';
+import { AddItemDialogComponent } from '../add-item-dialog/add-item-dialog.component';
+import { getMediaTypeFromMimetype, MediaType } from '../artifact-tab/artifact-tab.component';
+import { BuilderTabsComponent } from '../builder-tabs/builder-tabs.component';
+import { CanvasComponent } from '../canvas/canvas.component';
+import { ChatPanelComponent } from '../chat-panel/chat-panel.component';
+import { EditJsonDialogComponent } from '../edit-json-dialog/edit-json-dialog.component';
+import { EvalTabComponent } from '../eval-tab/eval-tab.component';
+import { PendingEventDialogComponent } from '../pending-event-dialog/pending-event-dialog.component';
+import { DeleteSessionDialogComponent, DeleteSessionDialogData, } from '../session-tab/delete-session-dialog/delete-session-dialog.component';
+import { SidePanelComponent } from '../side-panel/side-panel.component';
+import { TraceEventComponent } from '../trace-tab/trace-event/trace-event.component';
+import { ViewImageDialogComponent } from '../view-image-dialog/view-image-dialog.component';
 
-import {ChatMessagesInjectionToken} from './chat.component.i18n';
+import { ChatMessagesInjectionToken } from './chat.component.i18n';
 
 const ROOT_AGENT = 'root_agent';
 
@@ -164,6 +165,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly streamChatService = inject(STREAM_CHAT_SERVICE);
   private readonly stringToColorService = inject(STRING_TO_COLOR_SERVICE);
   private readonly traceService = inject(TRACE_SERVICE);
+  private readonly terminalService = inject(TERMINAL_SERVICE);
   protected readonly uiStateService = inject(UI_STATE_SERVICE);
   protected readonly agentBuilderService = inject(AGENT_BUILDER_SERVICE);
 
@@ -434,6 +436,16 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
             (res) => {
               this.currentSessionState = res.state;
               this.sessionId = res.id ?? '';
+
+              if (this.sessionId) {
+                this.terminalService.setContext({
+                  appName: this.appName,
+                  userId: this.userId,
+                  sessionId: this.sessionId,
+                });
+                this.terminalService.clear();
+              }
+
               this.sessionTab?.refreshSession();
               this.sessionTab?.reloadSession(this.sessionId);
 
@@ -618,8 +630,12 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   async getUserMessageParts() {
     let parts: any = [];
 
-    if (!!this.userInput.trim()) {
-      parts.push({text: `${this.userInput}`});
+    const terminalPrefix = this.terminalService.getAgentContextPrefix() ?? '';
+    const userText = this.userInput.trim() ? `${this.userInput}` : '';
+    const combined = `${terminalPrefix}${userText}`;
+
+    if (combined.trim()) {
+      parts.push({text: combined});
     }
 
     if (this.selectedFiles.length > 0) {
@@ -1199,6 +1215,15 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.traceService.resetTraceService();
     this.sessionId = session.id;
+
+    if (this.sessionId) {
+      this.terminalService.setContext({
+        appName: this.appName,
+        userId: this.userId,
+        sessionId: this.sessionId,
+      });
+    }
+
     this.currentSessionState = session.state;
     this.evalCase = null;
     this.isChatMode.set(true);

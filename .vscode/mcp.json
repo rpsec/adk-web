@@ -1,0 +1,118 @@
+{
+	"servers": {
+		
+		"neo4j-memory": {
+			"url": "http://localhost:8004/mcp",
+			"type": "http"
+		},
+		"neo4j-data-modeling": {
+			"url": "http://localhost:8005/mcp",
+			"disabledTools": [
+				"get_mermaid_config_str",
+				"get_example_data_model"
+			],
+			"type": "http"
+		},
+		"code-analysis-mcp": {
+			"url": "http://localhost:8002/sse",
+			"type": "http"
+		},
+		"knowledge-mcp": {
+			"url": "http://localhost:8003/sse",
+			"type": "http"
+		},
+		"fetch-mcp": {
+			"url": "http://localhost:8001/sse",
+			"type": "http"
+		},
+		"sequential-thinking": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-sequential-thinking"
+			],
+			"env": {},
+			"type": "stdio"
+		},
+		"mermaid": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"mcp-remote",
+				"https://mcp.mermaidchart.com/mcp"
+			],
+			"disabled": true,
+			"type": "stdio"
+		},
+		"duckduckgo": {
+			"command": "docker",
+			"args": [
+				"run",
+				"-i",
+				"--rm",
+				"mcp/duckduckgo"
+			],
+			"disabledTools": [
+				"fetch_content"
+			],
+			"type": "stdio"
+		},
+		"supabase-mcp-server": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@supabase/mcp-server-supabase@latest"
+				
+			],
+			"env": {},
+			"disabledTools": [],
+			"type": "stdio"
+		},
+		"microsoft/playwright-mcp": {
+			"command": "npx",
+			"args": [
+				"@playwright/mcp@latest"
+			],
+			"disabledTools": [],
+			"type": "stdio"
+		},
+		"memory": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-memory"
+			],
+			"env": {},
+			"type": "stdio"
+		},
+		"github-mcp-server": {
+			"command": "docker",
+			"args": [
+				"run",
+				"-i",
+				"--rm",
+				"-e",
+				"GITHUB_PERSONAL_ACCESS_TOKEN",
+				"ghcr.io/github/github-mcp-server"
+			],
+			"env": {
+				"GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+			},
+			"disabledTools": [
+				"add_comment_to_pending_review",
+				"add_issue_comment",
+				"assign_copilot_to_issue",
+				"create_branch",
+				"create_or_update_file",
+				"create_pull_request",
+				"get_label",
+				"issue_read",
+				"issue_write",
+				"list_issues",
+				"search_code"
+			],
+			"disabled": true,
+			"type": "stdio"
+		}
+	}
+}
