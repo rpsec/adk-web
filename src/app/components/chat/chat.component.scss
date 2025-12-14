@@ -742,3 +742,67 @@ app-canvas {
   font-size: 10px;
   color: var(--adk-web-text-color-light-gray);
 }
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.split-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+
+  as-split-area {
+    overflow: hidden;
+  }
+}
+
+.terminal-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: none;
+  background-color: var(--chat-card-background-color);
+  margin: 0;
+  padding: 0;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--chat-card-background-color);
+}
+
+.terminal-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--chat-event-container-color);
+}
+
+.terminal-close-btn {
+  width: 32px;
+  height: 32px;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+app-terminal-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
