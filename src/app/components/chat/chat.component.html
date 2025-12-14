@@ -297,7 +297,7 @@
         }
         <as-split direction="horizontal" class="split-container">
           @if (isTerminalVisible()) {
-            <as-split-area [size]="45" [minSize]="20" [maxSize]="80">
+            <as-split-area [size]="30" [minSize]="15" [maxSize]="50">
               <mat-card class="terminal-card">
                 <div class="terminal-header">
                   <span class="terminal-title">Terminal</span>
@@ -313,7 +313,7 @@
               </mat-card>
             </as-split-area>
           }
-          <as-split-area [size]="isTerminalVisible() ? 55 : 100">
+          <as-split-area [size]="isTerminalVisible() ? 70 : 100">
             <mat-card class="chat-card">
               @if (appName != "") {
                 <app-chat-panel

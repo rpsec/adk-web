@@ -15,45 +15,49 @@
  * limitations under the License.
  */
 
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 import {
-    AfterViewInit,
-    Component,
-    DestroyRef,
-    ElementRef,
-    inject,
-    input,
-    OnChanges,
-    SimpleChanges,
-    viewChild,
-} from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { FitAddon } from '@xterm/addon-fit';
-import { Terminal } from '@xterm/xterm';
-import { firstValueFrom } from 'rxjs';
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+  OnChanges,
+  SimpleChanges,
+  viewChild,
+} from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { MatButtonModule } from "@angular/material/button";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { FitAddon } from "@xterm/addon-fit";
+import { Terminal } from "@xterm/xterm";
+import { firstValueFrom } from "rxjs";
 
-import { TERMINAL_SERVICE, TerminalContext, TerminalSettings } from '../../core/services/interfaces/terminal';
-import { TERMINAL_COMMAND_SERVICE } from '../../core/services/interfaces/terminal-command';
+import { ElectronService } from "../../core/services/electron.service";
+import {
+  TERMINAL_SERVICE,
+  TerminalContext,
+  TerminalSettings,
+} from "../../core/services/interfaces/terminal";
+import { TERMINAL_COMMAND_SERVICE } from "../../core/services/interfaces/terminal-command";
 
-const PROMPT = '$ ';
+const PROMPT = "$ ";
 
 @Component({
-  selector: 'app-terminal-tab',
-  templateUrl: './terminal-tab.component.html',
-  styleUrls: ['./terminal-tab.component.scss'],
+  selector: "app-terminal-tab",
+  templateUrl: "./terminal-tab.component.html",
+  styleUrls: ["./terminal-tab.component.scss"],
   standalone: true,
   imports: [CommonModule, MatSlideToggleModule, MatButtonModule],
 })
 export class TerminalTabComponent implements AfterViewInit, OnChanges {
-  readonly appName = input('');
-  readonly userId = input('');
-  readonly sessionId = input('');
+  readonly appName = input("");
+  readonly userId = input("");
+  readonly sessionId = input("");
 
-  readonly terminalContainer = viewChild.required<ElementRef<HTMLElement>>(
-      'terminalContainer',
-  );
+  readonly terminalContainer =
+    viewChild.required<ElementRef<HTMLElement>>("terminalContainer");
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly terminalService = inject(TERMINAL_SERVICE);
@@ -72,36 +76,50 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
   private fitAddon: FitAddon | null = null;
   private resizeObserver: ResizeObserver | null = null;
 
-  private currentInput = '';
+  private currentInput = "";
   private isRunningCommand = false;
+
+  private readonly electronService = inject(ElectronService);
 
   ngAfterViewInit(): void {
     this.initTerminal();
-    this.syncContextToService();
-    this.renderFromHistory();
-    this.printPrompt();
+
+    if (this.electronService.isElectron) {
+      this.initElectronMode();
+    } else {
+      this.syncContextToService();
+      this.renderFromHistory();
+      this.printPrompt();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['appName'] || changes['userId'] || changes['sessionId']) {
+    if (this.electronService.isElectron) return;
+
+    if (changes["appName"] || changes["userId"] || changes["sessionId"]) {
       this.syncContextToService();
       this.renderFromHistory();
     }
   }
 
   updateSetting<K extends keyof TerminalSettings>(
-      key: K,
-      value: TerminalSettings[K],
+    key: K,
+    value: TerminalSettings[K]
   ): void {
-    this.terminalService.updateSettings({[key]: value} as Partial<TerminalSettings>);
+    this.terminalService.updateSettings({
+      [key]: value,
+    } as Partial<TerminalSettings>);
   }
 
   clearTerminal(): void {
     this.terminalService.clear();
     this.xterm?.clear();
-    this.currentInput = '';
+    this.currentInput = "";
     this.isRunningCommand = false;
-    this.printPrompt();
+
+    if (!this.electronService.isElectron) {
+      this.printPrompt();
+    }
   }
 
   private initTerminal(): void {
@@ -120,6 +138,10 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
     this.resizeObserver = new ResizeObserver(() => {
       try {
         fitAddon.fit();
+        if (this.electronService.isElectron && this.xterm) {
+          const { cols, rows } = this.xterm;
+          this.electronService.resize(cols, rows);
+        }
       } catch {
         // Best-effort only.
       }
@@ -140,6 +162,23 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
     });
   }
 
+  private initElectronMode(): void {
+    this.electronService.init();
+    this.electronService.output$.subscribe((data) => {
+      this.xterm?.write(data);
+      // Also append to history for persistence if desired,
+      // but raw ANSI from shell might be messy for redaction/storage.
+      // For now, we optionally log it or just trust the shell.
+      this.terminalService.appendOutput(data);
+    });
+
+    // Initial resize
+    if (this.xterm) {
+      const { cols, rows } = this.xterm;
+      this.electronService.resize(cols, rows);
+    }
+  }
+
   private syncContextToService(): void {
     const ctx = this.buildContext();
     if (!ctx) return;
@@ -152,7 +191,7 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
     const sessionId = this.sessionId();
 
     if (!appName || !userId || !sessionId) return null;
-    return {appName, userId, sessionId};
+    return { appName, userId, sessionId };
   }
 
   private renderFromHistory(): void {
@@ -162,10 +201,10 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
     this.xterm.reset();
     const lines = this.terminalService.getFullLines();
     if (lines.length > 0) {
-      this.xterm.writeln(lines.join('\n'));
+      this.xterm.writeln(lines.join("\n"));
     }
 
-    this.currentInput = '';
+    this.currentInput = "";
     this.isRunningCommand = false;
     this.printPrompt();
   }
@@ -175,9 +214,9 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
 
     // Avoid duplicating prompts when re-rendering.
     const bufferLine = this.xterm.buffer.active.getLine(
-        this.xterm.buffer.active.cursorY,
+      this.xterm.buffer.active.cursorY
     );
-    const current = bufferLine?.translateToString(true) ?? '';
+    const current = bufferLine?.translateToString(true) ?? "";
     if (current.endsWith(PROMPT)) {
       return;
     }
@@ -188,10 +227,15 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
   private async handleTerminalData(data: string): Promise<void> {
     if (!this.xterm) return;
 
+    if (this.electronService.isElectron) {
+      this.electronService.sendInput(data);
+      return;
+    }
+
     // Allow Ctrl+C to cancel input locally.
-    if (data === '\u0003') {
-      this.xterm.write('^C\r\n');
-      this.currentInput = '';
+    if (data === "\u0003") {
+      this.xterm.write("^C\r\n");
+      this.currentInput = "";
       this.isRunningCommand = false;
       this.printPrompt();
       return;
@@ -202,12 +246,12 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
     }
 
     // Enter
-    if (data === '\r') {
+    if (data === "\r") {
       const command = this.currentInput.trim();
-      this.xterm.write('\r\n');
+      this.xterm.write("\r\n");
 
       if (!command) {
-        this.currentInput = '';
+        this.currentInput = "";
         this.printPrompt();
         return;
       }
@@ -217,10 +261,10 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
     }
 
     // Backspace
-    if (data === '\u007f') {
+    if (data === "\u007f") {
       if (this.currentInput.length > 0) {
         this.currentInput = this.currentInput.slice(0, -1);
-        this.xterm.write('\b \b');
+        this.xterm.write("\b \b");
       }
       return;
     }
@@ -233,8 +277,10 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
   private async runCommand(command: string): Promise<void> {
     const ctx = this.buildContext();
     if (!ctx) {
-      this.xterm?.writeln('Missing session context; select/create a session first.');
-      this.currentInput = '';
+      this.xterm?.writeln(
+        "Missing session context; select/create a session first."
+      );
+      this.currentInput = "";
       this.printPrompt();
       return;
     }
@@ -246,7 +292,7 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
 
     try {
       const res = await firstValueFrom(
-          this.terminalCommandService.executeCommand({...ctx, command}),
+        this.terminalCommandService.executeCommand({ ...ctx, command })
       );
 
       const output = this.normalizeResponseOutput(res);
@@ -255,31 +301,35 @@ export class TerminalTabComponent implements AfterViewInit, OnChanges {
         this.terminalService.appendOutput(output);
 
         if (!/\r?\n$/.test(output)) {
-          this.xterm?.write('\r\n');
-          this.terminalService.appendOutput('\n');
+          this.xterm?.write("\r\n");
+          this.terminalService.appendOutput("\n");
         }
       }
 
-      if (typeof res.exitCode === 'number' && res.exitCode !== 0) {
+      if (typeof res.exitCode === "number" && res.exitCode !== 0) {
         const exitLine = `[exit ${res.exitCode}]`;
         this.xterm?.writeln(exitLine);
         this.terminalService.appendLine(exitLine);
       }
     } catch (e: unknown) {
-      const msg = 'Command failed; check backend logs.';
+      const msg = "Command failed; check backend logs.";
       this.xterm?.writeln(msg);
       this.terminalService.appendLine(msg);
     } finally {
       this.isRunningCommand = false;
-      this.currentInput = '';
+      this.currentInput = "";
       this.printPrompt();
     }
   }
 
-  private normalizeResponseOutput(res: {output?: string; stdout?: string; stderr?: string}): string {
+  private normalizeResponseOutput(res: {
+    output?: string;
+    stdout?: string;
+    stderr?: string;
+  }): string {
     if (res.output) return res.output;
-    const stdout = res.stdout ?? '';
-    const stderr = res.stderr ?? '';
+    const stdout = res.stdout ?? "";
+    const stderr = res.stderr ?? "";
     return `${stdout}${stderr}`;
   }
 }
