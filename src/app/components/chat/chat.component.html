@@ -249,76 +249,112 @@
             upload
           </span>
           }
+          <span
+            class="material-symbols-outlined toolbar-icon"
+            id="toolbar-toggle-terminal-button"
+            [matTooltip]="isTerminalVisible() ? 'Hide Terminal' : 'Show Terminal'"
+            (click)="toggleTerminal()"
+          >
+            {{ isTerminalVisible() ? 'terminal' : 'terminal' }}
+          </span>
         </div>
       </div>
       } }
     </div>
     }
-    <mat-card class="chat-card">
-      @if (!selectedAppControl.value) { @if (isLoadingApps()) {
-      <div class="empty-state-container">
-        <span>{{ i18n.loadingAgentsLabel }}</span>
-      </div>
-      } @else if (isApplicationSelectorEnabledObs | async) {
-      <div class="empty-state-container">
-        @if (((apps$ | async) || []).length > 0) {
-        <span
-          >{{ i18n.welcomeMessage }}<br />
-          {{ i18n.selectAgentMessage }}</span
-        >
-        } @else {
-        <div>
-          {{ i18n.failedToLoadAgentsMessage }}
-          <pre>adk web</pre>
-          in the folder that contains the agents.<br />
-          @if (loadingError()) { {{ i18n.errorMessageLabel }} <br />
-          <pre class="error">{{ loadingError() }}</pre>
-          } @else {
-          <pre class="warning">{{ i18n.noAgentsFoundWarning }}</pre>
+    <div class="content-container">
+      @if (!selectedAppControl.value) {
+        <mat-card class="chat-card">
+          @if (isLoadingApps()) {
+            <div class="empty-state-container">
+              <span>{{ i18n.loadingAgentsLabel }}</span>
+            </div>
+          } @else if (isApplicationSelectorEnabledObs | async) {
+            <div class="empty-state-container">
+              @if (((apps$ | async) || []).length > 0) {
+                <span>{{ i18n.welcomeMessage }}<br />{{ i18n.selectAgentMessage }}</span>
+              } @else {
+                <div>
+                  {{ i18n.failedToLoadAgentsMessage }}
+                  <pre>adk web</pre>
+                  in the folder that contains the agents.<br />
+                  @if (loadingError()) { 
+                    {{ i18n.errorMessageLabel }} <br />
+                    <pre class="error">{{ loadingError() }}</pre>
+                  } @else {
+                    <pre class="warning">{{ i18n.noAgentsFoundWarning }}</pre>
+                  }
+                </div>
+              }
+            </div>
           }
-        </div>
+        </mat-card>
+      } @else {
+        @if (longRunningEvents.length > 0) {
+          <button mat-fab color="primary" class="fab-button" (click)="openDialog()">
+            <mat-icon>priority_high</mat-icon>
+          </button>
         }
-      </div>
-      } } @if (longRunningEvents.length > 0) {
-      <button mat-fab color="primary" class="fab-button" (click)="openDialog()">
-        <mat-icon>priority_high</mat-icon>
-      </button>
-      } @if (appName != "") {
-      <app-chat-panel
-        [appName]="appName"
-        [messages]="messages()"
-        [isChatMode]="isChatMode()"
-        [evalCase]="evalCase"
-        [isEvalEditMode]="isEvalEditMode()"
-        [isEvalCaseEditing]="isEvalCaseEditing()"
-        [isEditFunctionArgsEnabled]="(isEditFunctionArgsEnabledObs | async) ?? false"
-        [(userInput)]="userInput"
-        [(userEditEvalCaseMessage)]="userEditEvalCaseMessage"
-        [selectedFiles]="selectedFiles"
-        [updatedSessionState]="updatedSessionState()"
-        [eventData]="eventData"
-        [isAudioRecording]="isAudioRecording"
-        [isVideoRecording]="isVideoRecording"
-        [hoveredEventMessageIndices]="hoveredEventMessageIndices"
-        (clickEvent)="clickEvent($event)"
-        (handleKeydown)="handleKeydown($event.event, $event.message)"
-        (cancelEditMessage)="cancelEditMessage($event)"
-        (saveEditMessage)="saveEditMessage($event)"
-        (openViewImageDialog)="openViewImageDialog($event)"
-        (openBase64InNewTab)="openBase64InNewTab($event.data, $event.mimeType)"
-        (editEvalCaseMessage)="editEvalCaseMessage($event)"
-        (deleteEvalCaseMessage)="deleteEvalCaseMessage($event.message, $event.index)"
-        (editFunctionArgs)="editFunctionArgs($event)"
-        (fileSelect)="onFileSelect($event)"
-        (removeFile)="removeFile($event)"
-        (removeStateUpdate)="removeStateUpdate()"
-        (sendMessage)="sendMessage($event)"
-        (updateState)="updateState()"
-        (toggleAudioRecording)="toggleAudioRecording()"
-        (toggleVideoRecording)="toggleVideoRecording()"
-      ></app-chat-panel>
+        <as-split direction="horizontal" class="split-container">
+          @if (isTerminalVisible()) {
+            <as-split-area [size]="45" [minSize]="20" [maxSize]="80">
+              <mat-card class="terminal-card">
+                <div class="terminal-header">
+                  <span class="terminal-title">Terminal</span>
+                  <button mat-icon-button (click)="toggleTerminal()" class="terminal-close-btn">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <app-terminal-tab
+                  [appName]="appName"
+                  [userId]="userId"
+                  [sessionId]="sessionId"
+                ></app-terminal-tab>
+              </mat-card>
+            </as-split-area>
+          }
+          <as-split-area [size]="isTerminalVisible() ? 55 : 100">
+            <mat-card class="chat-card">
+              @if (appName != "") {
+                <app-chat-panel
+                  [appName]="appName"
+                  [messages]="messages()"
+                  [isChatMode]="isChatMode()"
+                  [evalCase]="evalCase"
+                  [isEvalEditMode]="isEvalEditMode()"
+                  [isEvalCaseEditing]="isEvalCaseEditing()"
+                  [isEditFunctionArgsEnabled]="(isEditFunctionArgsEnabledObs | async) ?? false"
+                  [(userInput)]="userInput"
+                  [(userEditEvalCaseMessage)]="userEditEvalCaseMessage"
+                  [selectedFiles]="selectedFiles"
+                  [updatedSessionState]="updatedSessionState()"
+                  [eventData]="eventData"
+                  [isAudioRecording]="isAudioRecording"
+                  [isVideoRecording]="isVideoRecording"
+                  [hoveredEventMessageIndices]="hoveredEventMessageIndices"
+                  (clickEvent)="clickEvent($event)"
+                  (handleKeydown)="handleKeydown($event.event, $event.message)"
+                  (cancelEditMessage)="cancelEditMessage($event)"
+                  (saveEditMessage)="saveEditMessage($event)"
+                  (openViewImageDialog)="openViewImageDialog($event)"
+                  (openBase64InNewTab)="openBase64InNewTab($event.data, $event.mimeType)"
+                  (editEvalCaseMessage)="editEvalCaseMessage($event)"
+                  (deleteEvalCaseMessage)="deleteEvalCaseMessage($event.message, $event.index)"
+                  (editFunctionArgs)="editFunctionArgs($event)"
+                  (fileSelect)="onFileSelect($event)"
+                  (removeFile)="removeFile($event)"
+                  (removeStateUpdate)="removeStateUpdate()"
+                  (sendMessage)="sendMessage($event)"
+                  (updateState)="updateState()"
+                  (toggleAudioRecording)="toggleAudioRecording()"
+                  (toggleVideoRecording)="toggleVideoRecording()"
+                ></app-chat-panel>
+              }
+            </mat-card>
+          </as-split-area>
+        </as-split>
       }
-    </mat-card>
+    </div>
 
     @if (bottomPanelVisible) {
     <div #bottomPanel class="trace-detail-container" appResizableBottomPanel>

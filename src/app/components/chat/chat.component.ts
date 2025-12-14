@@ -36,6 +36,7 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { catchError, distinctUntilChanged, filter, first, map, shareReplay, switchMap, take, tap } from 'rxjs/operators';
 
+import { AngularSplitModule } from 'angular-split';
 import { URLUtil } from '../../../utils/url-util';
 import { AgentRunRequest } from '../../core/models/AgentRunRequest';
 import { EvalCase } from '../../core/models/Eval';
@@ -70,6 +71,7 @@ import { EvalTabComponent } from '../eval-tab/eval-tab.component';
 import { PendingEventDialogComponent } from '../pending-event-dialog/pending-event-dialog.component';
 import { DeleteSessionDialogComponent, DeleteSessionDialogData, } from '../session-tab/delete-session-dialog/delete-session-dialog.component';
 import { SidePanelComponent } from '../side-panel/side-panel.component';
+import { TerminalTabComponent } from '../terminal-tab/terminal-tab.component';
 import { TraceEventComponent } from '../trace-tab/trace-event/trace-event.component';
 import { ViewImageDialogComponent } from '../view-image-dialog/view-image-dialog.component';
 
@@ -140,6 +142,8 @@ const BIDI_STREAMING_RESTART_WARNING =
     SidePanelComponent,
     CanvasComponent,
     BuilderTabsComponent,
+    TerminalTabComponent,
+    AngularSplitModule,
   ],
 })
 export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -181,6 +185,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   hasEvalCaseChanged = signal(false);
   isEvalEditMode = signal(false);
   isBuilderMode = signal(false);  // Default to builder mode off
+  isTerminalVisible = signal(false);  // Terminal visibility state (default hidden)
   videoElement!: HTMLVideoElement;
   currentMessage = '';
   messages = signal<any[]>([]);
@@ -1182,6 +1187,10 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       this.sideDrawer()?.open();
     }
     this.showSidePanel = !this.showSidePanel;
+  }
+
+  toggleTerminal() {
+    this.isTerminalVisible.set(!this.isTerminalVisible());
   }
 
   protected handleTabChange(event: any) {
